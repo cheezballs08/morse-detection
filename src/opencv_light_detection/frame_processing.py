@@ -3,6 +3,7 @@ from opencv_light_detection.constants import Constants
 from typing import Sequence
 from cv2.typing import MatLike
 
+import time
 import cv2
 import numpy as np
 
@@ -15,6 +16,18 @@ class FrameProcessor():
     result_gui_frame: MatLike
 
     contours: Sequence[MatLike]
+
+    contour_midpoints: list[tuple[int, int]] = list()
+
+    previous_light_state: bool = False
+
+    current_light_state: bool
+
+    light_dark_intervals: list[tuple[bool, float]] = list()
+
+    is_first_light_state_check: bool = True
+
+    interval_start_time = time.time()
 
     def __init__(self, camera_id: int, api_preference: int) -> None:
         self.video_capture = cv2.VideoCapture(camera_id, api_preference)
@@ -39,6 +52,8 @@ class FrameProcessor():
         self.captured_frame = frame
 
         self.result_gui_frame = frame
+
+        self.contour_midpoints = list()
 
         return read_state
 
@@ -109,6 +124,73 @@ class FrameProcessor():
                 Constants.COLOR_GREEN,
                 Constants.BOUNDING_BOX_TITLE_FONT_THICKNESS
             )
+
+    def find_contour_midpoints(self) -> None:
+        for contour in self.contours:
+            moments = cv2.moments(contour)
+
+            if moments["m00"] != 0:
+                midpoint_x_pos = int(moments["m10"] / moments["m00"])
+                midpoint_y_pos = int(moments["m01"] / moments["m00"])
+
+                self.contour_midpoints.append((midpoint_x_pos, midpoint_y_pos))
+
+    def draw_contour_midpoints(self) -> None:
+        for coordinate in self.contour_midpoints:
+            cv2.circle(
+                self.result_gui_frame,
+                coordinate,
+                Constants.DOT_RADIUS,
+                Constants.COLOR_GREEN,
+                Constants.DOT_THICKNESS
+            )
+
+    def update_lightsource_state(self) -> None:
+        if not self.is_first_light_state_check:
+            self.previous_light_state = self.current_light_state
+            self.current_light_state = len(self.contours) != 0
+
+        else:
+            self.current_light_state = len(self.contours) != 0
+            self.is_first_light_state_check = False
+
+
+    def draw_lightsource_state(self) -> None:
+        if self.current_light_state:
+            cv2.putText(
+                self.result_gui_frame,
+                Constants.HAS_LIGHT_STRING,
+                (Constants.DATA_TITLE_X_POSITION, Constants.DATA_TITLE_Y_POSITION),
+                Constants.DATA_TITLE_FONT,
+                Constants.DATA_TITLE_FONT_SCALE,
+                Constants.COLOR_GREEN,
+                Constants.DATA_TITLE_FONT_THICKNESS
+            )
+        else:
+            cv2.putText(
+                self.result_gui_frame,
+                Constants.DOSENT_HAVE_LIGHT_STRING,
+                (Constants.DATA_TITLE_X_POSITION, Constants.DATA_TITLE_Y_POSITION),
+                Constants.DATA_TITLE_FONT,
+                Constants.DATA_TITLE_FONT_SCALE,
+                Constants.COLOR_RED,
+                Constants.DATA_TITLE_FONT_THICKNESS
+            )
+
+    def record_light_activation_intervals(self, trigger_interval_end: bool) -> None:
+
+        if self.previous_light_state != self.current_light_state and not trigger_interval_end:
+            duration = time.time() - self.interval_start_time
+
+            self.light_dark_intervals.append((self.previous_light_state, duration))
+
+            self.interval_start_time = time.time()
+
+        elif trigger_interval_end:
+            duration = time.time() - self.interval_start_time
+
+            self.light_dark_intervals.append((self.previous_light_state, duration))
+
 
     def show_gui(self) -> None:
         cv2.imshow(Constants.WINDOW_NAME, self.result_gui_frame)

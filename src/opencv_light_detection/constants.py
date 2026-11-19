@@ -4,10 +4,10 @@ import cv2
 
 class Constants():
 
-    CAMERA_ID: Final[int] = 21234
+    CAMERA_ID: Final[int] = 2
     VIDEO_CAPTURE_API: Final[int] = cv2.CAP_V4L2
 
-    MINIMUM_BRIGHTNESS: Final[int] = 240
+    MINIMUM_BRIGHTNESS: Final[int] = 250
     MAXIMUM_BRIGHTNESS: Final[int] = 255
 
     BRIGHTNESS_TRESHOLD_TYPE: Final[int] = cv2.THRESH_BINARY
@@ -47,11 +47,26 @@ class Constants():
     BOUNDING_BOX_TITLE_FONT_SCALE: Final[float] = 0.5
     BOUNDING_BOX_TITLE_FONT_THICKNESS: Final[int] = 2
 
+    DATA_TITLE_X_POSITION: Final[int] = 20
+    DATA_TITLE_Y_POSITION: Final[int] = 20
+    DATA_SPACING: Final[int] = 0
+
+    DATA_TITLE_FONT: Final[int] = cv2.FONT_HERSHEY_SIMPLEX
+
+    DATA_TITLE_FONT_SCALE: Final[float] = 0.5
+    DATA_TITLE_FONT_THICKNESS: Final[int] = 2
+
+    HAS_LIGHT_STRING: Final[str] = "Light detected inside frame"
+    DOSENT_HAVE_LIGHT_STRING: Final[str] = "No Light inside frame"
+
+    DOT_RADIUS: Final[int] = 3
+    DOT_THICKNESS: Final[int] = cv2.FILLED
+
     WINDOW_NAME: Final[str] = "Result"
 
-    COLOR_RED: Final[tuple[int, int, int]] = (255, 0, 0)
+    COLOR_RED: Final[tuple[int, int, int]] = (0, 0, 255)
     COLOR_GREEN: Final[tuple[int, int, int]] = (0, 255, 0)
-    COLOR_BLUE: Final[tuple[int, int, int]] = (0, 0, 255)
+    COLOR_BLUE: Final[tuple[int, int, int]] = (255, 0, 0)
     COLOR_WHITE: Final[tuple[int, int, int]] = (255, 255, 255)
     COLOR_BLACK: Final[tuple[int, int, int]] = (0, 0, 0)
 
