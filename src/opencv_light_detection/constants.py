@@ -57,7 +57,7 @@ class Constants():
     DATA_TITLE_FONT_THICKNESS: Final[int] = 2
 
     HAS_LIGHT_STRING: Final[str] = "Light detected inside frame"
-    DOSENT_HAVE_LIGHT_STRING: Final[str] = "No Light inside frame"
+    DOSENT_HAVE_LIGHT_STRING: Final[str] = "No light inside frame"
 
     DOT_RADIUS: Final[int] = 3
     DOT_THICKNESS: Final[int] = cv2.FILLED
@@ -72,3 +72,14 @@ class Constants():
 
     EXIT_KEY: Final[int] = ord("q")
     KEY_WAIT_PERIOD_MILISECONDS: Final[int] = 1
+
+    MORSE_DOT_RANGE_MIN: Final[float] = 0.17
+    MORSE_DOT_RANGE_MAX: Final[float] = 0.5
+    MORSE_LINE_RANGE_MIN: Final[float] = 0.50001
+    MORSE_LINE_RANGE_MAX: Final[float] = 2
+    MORSE_SYMBOL_BREAK_RANGE_MIN: Final[float] = 0
+    MORSE_SYMBOL_BREAK_RANGE_MAX: Final[float] = 0.5
+    MORSE_WORD_BREAK_RANGE_MIN: Final[float] = .50001
+    MORSE_WORD_BREAK_RANGE_MAX: Final[float] = 2
+    MORSE_TIMEOUT_RANGE_MIN: Final[float] = 2.00001
+    MORSE_TIMEOUT_RANGE_MAX: Final[float] = float("inf")

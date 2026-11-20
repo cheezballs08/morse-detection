@@ -1,6 +1,7 @@
 from opencv_light_detection.return_codes import ReturnCode
 from opencv_light_detection.frame_processing import FrameProcessor
 from opencv_light_detection.constants import Constants
+import opencv_light_detection.interval_translator as interval_translator
 
 def main() -> int:
 
@@ -32,10 +33,27 @@ def main() -> int:
         if frame_processor.check_interrupt_state() == True:
             frame_processor.record_light_activation_intervals(True)
 
-            for interval in frame_processor.light_dark_intervals:
-                print(interval)
+            intervals = frame_processor.light_dark_intervals
 
             frame_processor.exit()
+
+            for interval in intervals:
+                print(interval)
+
+            # assuming first interval is always dark
+
+            intervals.pop(0)
+
+            morse_tokens = interval_translator.interval_list_to_morse_token_list(intervals)
+
+            print("<------->")
+
+            print(morse_tokens)
+
+            print("<------->")
+
+            for token in morse_tokens:
+                print(token, end=" ")
 
             return ReturnCode.EXIT_SUCCESS.value
 
