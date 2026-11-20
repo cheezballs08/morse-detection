@@ -73,13 +73,37 @@ class Constants():
     EXIT_KEY: Final[int] = ord("q")
     KEY_WAIT_PERIOD_MILISECONDS: Final[int] = 1
 
-    MORSE_DOT_RANGE_MIN: Final[float] = 0.17
-    MORSE_DOT_RANGE_MAX: Final[float] = 0.5
-    MORSE_LINE_RANGE_MIN: Final[float] = 0.50001
-    MORSE_LINE_RANGE_MAX: Final[float] = 2
-    MORSE_SYMBOL_BREAK_RANGE_MIN: Final[float] = 0
-    MORSE_SYMBOL_BREAK_RANGE_MAX: Final[float] = 0.5
-    MORSE_WORD_BREAK_RANGE_MIN: Final[float] = .50001
-    MORSE_WORD_BREAK_RANGE_MAX: Final[float] = 2
-    MORSE_TIMEOUT_RANGE_MIN: Final[float] = 2.00001
+    MORSE_DOT_DURATION: Final[float] = 0.075
+    MORSE_TIMEOUT: Final[float] = 3
+
+    MORSE_TOLERANCE: Final[float] = 0.50
+
+    @staticmethod
+    def get_range(duration: float, tolerance: float = MORSE_TOLERANCE) -> tuple[float, float]:
+        return (
+            duration * (1 - tolerance),
+            duration * (1 + tolerance),
+        )
+
+    MORSE_DOT_RANGE_MIN, MORSE_DOT_RANGE_MAX = get_range(
+        MORSE_DOT_DURATION,
+    )
+
+    MORSE_LINE_RANGE_MIN, MORSE_LINE_RANGE_MAX = get_range(
+        MORSE_DOT_DURATION * 3
+    )
+
+    MORSE_SYMBOL_BREAK_RANGE_MIN, MORSE_SYMBOL_BREAK_RANGE_MAX = get_range(
+        MORSE_DOT_DURATION
+    )
+
+    MORSE_LETTER_BREAK_RANGE_MIN, MORSE_LETTER_BREAK_RANGE_MAX = get_range(
+        MORSE_DOT_DURATION * 3
+    )
+
+    MORSE_WORD_BREAK_RANGE_MIN, MORSE_WORD_BREAK_RANGE_MAX = get_range(
+        MORSE_DOT_DURATION * 7
+    )
+
+    MORSE_TIMEOUT_RANGE_MIN: Final[float] = MORSE_TIMEOUT
     MORSE_TIMEOUT_RANGE_MAX: Final[float] = float("inf")

@@ -22,7 +22,7 @@ def main() -> int:
 
         frame_processor.find_contours_hsv()
 
-        frame_processor.draw_contour_bounding_boxes()
+        # frame_processor.draw_contour_bounding_boxes()
 
         frame_processor.update_lightsource_state()
 
@@ -54,6 +54,19 @@ def main() -> int:
 
             for token in morse_tokens:
                 print(token, end=" ")
+
+            print()
+
+            print("<------->")
+
+            character_sequence = interval_translator.morse_token_list_to_character_list(morse_tokens)
+
+            print(character_sequence)
+
+            print("<------->")
+
+            for character in character_sequence:
+                print(character, end="")
 
             return ReturnCode.EXIT_SUCCESS.value
 
